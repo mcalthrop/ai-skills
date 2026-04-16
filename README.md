@@ -1,6 +1,6 @@
-# claude-skills
+# ai-skills
 
-A centralised collection of coding rules, shareable across multiple repos via `git subtree`.
+A centralised collection of AI coding rules, shareable across multiple repos via `git subtree`.
 
 Rules live in `rules/` as focused markdown files. Each repo imports whichever rules it needs using the `@import` syntax supported by Claude Code and Codex — so the rules are always active without any manual invocation.
 
