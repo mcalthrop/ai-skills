@@ -17,10 +17,11 @@ See the [`rules/`](rules/) directory.
 Run this once in your target repo, from the repo root:
 
 ```sh
+git checkout -b chore/add-ai-rules
 git subtree add --prefix rules https://github.com/mcalthrop/claude-skills main --squash
 ```
 
-This checks out the `rules/` files from this repo into `rules/` in your target repo, so you will need to commit the changes.
+`git subtree add` creates a commit automatically, so create a branch first to keep the change reviewable via a PR.
 
 ### Import rules into your instructions file
 
