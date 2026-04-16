@@ -18,7 +18,7 @@ Run this once in your target repo, from the repo root:
 
 ```sh
 git checkout -b chore/add-ai-rules
-git subtree add --prefix rules https://github.com/mcalthrop/claude-skills main --squash
+git subtree add --prefix rules https://github.com/mcalthrop/ai-skills main --squash
 ```
 
 `git subtree add` creates a commit automatically, so create a branch first to keep the change reviewable via a PR.
@@ -54,7 +54,7 @@ So to pick them up, create a branch and pull in the latest changes:
 
 ```sh
 git checkout -b chore/update-ai-rules
-git subtree pull --prefix rules https://github.com/mcalthrop/claude-skills main --squash
+git subtree pull --prefix rules https://github.com/mcalthrop/ai-skills main --squash
 ```
 
 Like `git subtree add`, this creates a commit automatically.
