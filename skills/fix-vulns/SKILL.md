@@ -26,29 +26,43 @@ git fetch origin main
 git checkout -b fix/security-vulnerabilities origin/main
 ```
 
-4. Attempt to fix all vulnerabilities automatically:
-
-```bash
-zsh -i -c "pnpm audit --fix"
-```
-
-5. If any vulnerabilities remain after `--fix`, resolve them by manually updating the affected packages to the minimum safe version identified in the audit output:
+4. For each vulnerable package identified in the audit output, update it to the minimum safe version:
 
 ```bash
 zsh -i -c "pnpm update <package-name>"
 ```
 
-6. Re-run the audit to confirm all vulnerabilities are resolved:
+If the required safe version exceeds the current semver range in `package.json`, update the range in `package.json` first, then run `pnpm update <package-name>`.
+
+For transitive (indirect) dependencies that cannot be updated directly, add a `pnpm.overrides` entry in `package.json` to force the minimum safe version across the entire dependency tree:
+
+```json
+{
+  "pnpm": {
+    "overrides": {
+      "<package-name>": "<minimum-safe-version>"
+    }
+  }
+}
+```
+
+Then run `pnpm install` to apply the override:
+
+```bash
+zsh -i -c "pnpm install"
+```
+
+5. Re-run the audit to confirm all vulnerabilities are resolved:
 
 ```bash
 zsh -i -c "pnpm audit"
 ```
 
-7. Commit the changes:
+6. Commit the changes:
 
 ```bash
 git add pnpm-lock.yaml package.json
 git commit -m "fix(deps): resolve pnpm audit vulnerabilities"
 ```
 
-8. Push the branch and raise a draft PR. The PR body must list every vulnerability that was fixed, including package name, severity, and the resolution applied.
+7. Push the branch and raise a draft PR. The PR body must list every vulnerability that was fixed, including package name, severity, and the resolution applied.
