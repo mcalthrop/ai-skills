@@ -19,8 +19,18 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 REPO_NAME="$(basename "${REPO_ROOT}")"
 WORKTREE_PATH="${REPO_ROOT}/../${REPO_NAME}-chore-update-ai-resources"
 git fetch origin main
-git worktree remove "${WORKTREE_PATH}" 2>/dev/null || :
-git branch --delete --force chore/update-ai-resources 2>/dev/null || :
+if [ -e "${WORKTREE_PATH}" ]; then
+  git worktree remove --force "${WORKTREE_PATH}" || {
+    echo "Failed to remove existing worktree at ${WORKTREE_PATH}. Resolve it and retry." >&2
+    exit 1
+  }
+fi
+if git show-ref --verify --quiet refs/heads/chore/update-ai-resources; then
+  git branch --delete --force chore/update-ai-resources || {
+    echo "Failed to delete existing branch chore/update-ai-resources. Resolve it and retry." >&2
+    exit 1
+  }
+fi
 git worktree add "${WORKTREE_PATH}" --branch chore/update-ai-resources origin/main
 ```
 
@@ -67,7 +77,7 @@ git -C "${WORKTREE_PATH}" commit -m "chore: update ai-resources snapshot"
 
      ```bash
      git -C "${WORKTREE_PATH}" push --set-upstream origin chore/update-ai-resources
-     gh pr create --draft --title "chore: update ai-resources snapshot"
+     (cd "${WORKTREE_PATH}" && gh pr create --draft --title "chore: update ai-resources snapshot")
      ```
 
      Then remove the worktree:

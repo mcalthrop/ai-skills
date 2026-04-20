@@ -42,6 +42,18 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 REPO_NAME="$(basename "${REPO_ROOT}")"
 WORKTREE_PATH="${REPO_ROOT}/../${REPO_NAME}-fix-security-vulnerabilities"
 git fetch origin main
+if [ -e "${WORKTREE_PATH}" ]; then
+  git worktree remove --force "${WORKTREE_PATH}" || {
+    echo "Failed to remove existing worktree at ${WORKTREE_PATH}. Resolve it and retry." >&2
+    exit 1
+  }
+fi
+if git show-ref --verify --quiet refs/heads/fix/security-vulnerabilities; then
+  git branch --delete --force fix/security-vulnerabilities || {
+    echo "Failed to delete existing branch fix/security-vulnerabilities. Resolve it and retry." >&2
+    exit 1
+  }
+fi
 git worktree add "${WORKTREE_PATH}" --branch fix/security-vulnerabilities origin/main
 ```
 
