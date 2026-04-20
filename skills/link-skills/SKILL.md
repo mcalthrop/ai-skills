@@ -17,9 +17,9 @@ Create symlinks in `.claude/skills/` for every skill in the `ai-resources` direc
 
 ```bash
 for skill_dir in ai-resources/skills/*/; do
-  skill_name=$(basename "$skill_dir")
+  skill_name=$(basename "${skill_dir}")
   mkdir -p .claude/skills
-  ln -sfn "../../ai-resources/skills/$skill_name" ".claude/skills/$skill_name"
+  ln -sfn "../../ai-resources/skills/${skill_name}" ".claude/skills/${skill_name}"
 done
 ```
 
