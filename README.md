@@ -17,8 +17,8 @@ Run this once in your target repo, from the repo root:
 ```sh
 git checkout -b chore/add-ai-resources
 mkdir -p ai-resources
-curl -L https://github.com/mcalthrop/ai-resources/archive/refs/heads/main.tar.gz \
-  | tar -xz --strip-components=1 -C ai-resources
+curl --location https://github.com/mcalthrop/ai-resources/archive/refs/heads/main.tar.gz \
+  | tar -xz --strip-components=1 --directory ai-resources
 git add ai-resources
 git commit -m "chore: add ai-resources snapshot"
 ```
@@ -64,8 +64,8 @@ To pick up the latest changes, use the bundled `update-ai-resources` skill (if y
 
 ```sh
 git checkout -b chore/update-ai-resources
-curl -L https://github.com/mcalthrop/ai-resources/archive/refs/heads/main.tar.gz \
-  | tar -xz --strip-components=1 -C ai-resources
+curl --location https://github.com/mcalthrop/ai-resources/archive/refs/heads/main.tar.gz \
+  | tar -xz --strip-components=1 --directory ai-resources
 git add ai-resources
 git commit -m "chore: update ai-resources snapshot"
 ```
