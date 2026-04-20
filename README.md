@@ -27,6 +27,10 @@ git commit -m "chore: add ai-resources snapshot"
 
 Create a branch first so the addition is reviewable via a PR. The `rm -rf ai-resources` step ensures the command is safe to re-run if the directory already exists.
 
+Then ask Claude to create a PR:
+
+> create a pr
+
 ### Import all rules and skills
 
 To import all rules and skills, add a single line to your `CLAUDE.md` or `AGENTS.md`:
