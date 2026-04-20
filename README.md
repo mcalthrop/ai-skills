@@ -16,9 +16,10 @@ Run this once in your target repo, from the repo root:
 
 ```sh
 git checkout -b chore/add-ai-resources
-mkdir -p ai-resources
+tmp_dir="$(mktemp --directory)"
 curl --location https://github.com/mcalthrop/ai-resources/archive/refs/heads/main.tar.gz \
-  | tar -xz --strip-components=1 --directory ai-resources
+  | tar --extract --gzip --strip-components=1 --directory "$tmp_dir"
+mv "$tmp_dir" ai-resources
 git add ai-resources
 git commit -m "chore: add ai-resources snapshot"
 ```
@@ -60,10 +61,10 @@ The tool reads the instructions file automatically, so the imported rules are al
 
 When the resources in this repo change, your repo won't automatically see them.
 
-To pick up the latest changes, use the bundled `/update-ai-resources` skill (if you have skills linked), or run manually.
+To pick up the latest changes, use the bundled `/update-ai-resources` skill (if you have skills linked). For manual steps, see [`skills/update-ai-resources/`](./skills/update-ai-resources/).
 
-If your `CLAUDE.md` imports `@ai-resources/CLAUDE.md`, Claude already knows how to set up the symlinks. Just tell it:
+If your `CLAUDE.md` imports `@ai-resources/CLAUDE.md`, Claude already knows how to run the skill. Just tell it:
 
-> update ai skills
+> update ai-resources
 
 If you are importing individual files, check whether any rules were added, removed, or renamed and update your instructions file accordingly.

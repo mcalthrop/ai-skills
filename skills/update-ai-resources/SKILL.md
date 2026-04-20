@@ -13,27 +13,42 @@ Download the latest snapshot of ai-resources from GitHub and commit the update o
 
 1. Confirm that an `ai-resources/` directory exists in the current working directory. If not, abort and tell the user to add ai-resources first (see the ai-resources README).
 
-2. Create a branch and download the latest snapshot:
+2. Create a branch from `origin/main`, deleting any existing local branch of the same name first:
 
 ```bash
-git checkout -b chore/update-ai-resources
-curl --location https://github.com/mcalthrop/ai-resources/archive/refs/heads/main.tar.gz \
-  | tar -xz --strip-components=1 --directory ai-resources
+git fetch origin main
+git branch --delete --force chore/update-ai-resources 2>/dev/null || true
+git checkout -b chore/update-ai-resources origin/main
 ```
 
-3. Check whether anything changed:
+3. Download the latest snapshot into a temp directory, then replace `ai-resources/`:
+
+```bash
+tmp_dir="$(mktemp --directory)"
+curl --location https://github.com/mcalthrop/ai-resources/archive/refs/heads/main.tar.gz \
+  | tar --extract --gzip --strip-components=1 --directory "$tmp_dir"
+rm -rf ai-resources
+mv "$tmp_dir" ai-resources
+```
+
+4. Check whether anything changed:
 
 ```bash
 git diff --stat ai-resources
 ```
 
-If there are no changes, report that ai-resources is already up to date, delete the branch, and stop.
+If there are no changes, switch back to the previous branch, delete `chore/update-ai-resources`, report that ai-resources is already up to date, and stop:
 
-4. Stage and commit the changes:
+```bash
+git checkout -
+git branch --delete chore/update-ai-resources
+```
+
+5. Stage and commit the changes:
 
 ```bash
 git add ai-resources
 git commit -m "chore: update ai-resources snapshot"
 ```
 
-5. Report which files changed and remind the user to raise a PR.
+6. Report which files changed and remind the user to raise a PR.
