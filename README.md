@@ -1,6 +1,6 @@
 # ai-resources
 
-A centralised collection of AI coding resources (rules and skills), shareable across multiple repos via `git subtree`.
+A centralised collection of AI coding resources (rules and skills), shareable across multiple repos by downloading a snapshot.
 
 **Rules** live in [`rules`](./rules/) as focused markdown files.
 
@@ -10,16 +10,20 @@ A centralised collection of AI coding resources (rules and skills), shareable ac
 
 ## Using these resources in your repo
 
-### Add this repo as a subtree
+### Add ai-resources to your repo
 
 Run this once in your target repo, from the repo root:
 
 ```sh
 git checkout -b chore/add-ai-resources
-git subtree add --prefix ai-resources https://github.com/mcalthrop/ai-resources main --squash
+mkdir -p ai-resources
+curl -L https://github.com/mcalthrop/ai-resources/archive/refs/heads/main.tar.gz \
+  | tar -xz --strip-components=1 -C ai-resources
+git add ai-resources
+git commit -m "chore: add ai-resources snapshot"
 ```
 
-`git subtree add` creates a commit automatically, so create a branch first to keep the change reviewable via a PR.
+Create a branch first so the addition is reviewable via a PR.
 
 ### Import all rules and skills
 
@@ -56,13 +60,14 @@ The tool reads the instructions file automatically, so the imported rules are al
 
 When the resources in this repo change, your repo won't automatically see them.
 
-So to pick them up, create a branch and pull in the latest changes:
+To pick up the latest changes, use the bundled `update-ai-resources` skill (if you have skills linked), or run manually:
 
 ```sh
 git checkout -b chore/update-ai-resources
-git subtree pull --prefix ai-resources https://github.com/mcalthrop/ai-resources main --squash
+curl -L https://github.com/mcalthrop/ai-resources/archive/refs/heads/main.tar.gz \
+  | tar -xz --strip-components=1 -C ai-resources
+git add ai-resources
+git commit -m "chore: update ai-resources snapshot"
 ```
-
-Like `git subtree add`, this creates a commit automatically.
 
 If you are importing individual files, check whether any rules were added, removed, or renamed and update your instructions file accordingly.
