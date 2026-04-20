@@ -60,14 +60,10 @@ The tool reads the instructions file automatically, so the imported rules are al
 
 When the resources in this repo change, your repo won't automatically see them.
 
-To pick up the latest changes, use the bundled `update-ai-resources` skill (if you have skills linked), or run manually:
+To pick up the latest changes, use the bundled `/update-ai-resources` skill (if you have skills linked), or run manually.
 
-```sh
-git checkout -b chore/update-ai-resources
-curl --location https://github.com/mcalthrop/ai-resources/archive/refs/heads/main.tar.gz \
-  | tar -xz --strip-components=1 --directory ai-resources
-git add ai-resources
-git commit -m "chore: update ai-resources snapshot"
-```
+If your `CLAUDE.md` imports `@ai-resources/CLAUDE.md`, Claude already knows how to set up the symlinks. Just tell it:
+
+> update ai skills
 
 If you are importing individual files, check whether any rules were added, removed, or renamed and update your instructions file accordingly.
