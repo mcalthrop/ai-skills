@@ -16,12 +16,12 @@ Download the latest snapshot of ai-resources from GitHub and commit the update o
 
 ```bash
 REPO_ROOT="$(git rev-parse --show-toplevel)"
-REPO_NAME="$(basename "$REPO_ROOT")"
+REPO_NAME="$(basename "${REPO_ROOT}")"
 WORKTREE_PATH="${REPO_ROOT}/../${REPO_NAME}-chore-update-ai-resources"
 git fetch origin main
-git worktree remove "$WORKTREE_PATH" 2>/dev/null || :
+git worktree remove "${WORKTREE_PATH}" 2>/dev/null || :
 git branch --delete --force chore/update-ai-resources 2>/dev/null || :
-git worktree add "$WORKTREE_PATH" --branch chore/update-ai-resources origin/main
+git worktree add "${WORKTREE_PATH}" --branch chore/update-ai-resources origin/main
 ```
 
 3. Download the latest snapshot into a temp directory, then replace `ai-resources/` inside the worktree:
@@ -30,28 +30,28 @@ git worktree add "$WORKTREE_PATH" --branch chore/update-ai-resources origin/main
 TMP_DIR="$(mktemp --directory)"
 curl --location https://github.com/mcalthrop/ai-resources/archive/refs/heads/main.tar.gz \
   | tar --extract --gzip --strip-components=1 --directory "$TMP_DIR"
-rm -rf "$WORKTREE_PATH/ai-resources"
-mv "$TMP_DIR" "$WORKTREE_PATH/ai-resources"
+rm -rf "${WORKTREE_PATH}/ai-resources"
+mv "$TMP_DIR" "${WORKTREE_PATH}/ai-resources"
 ```
 
 4. Check whether anything changed:
 
 ```bash
-git -C "$WORKTREE_PATH" diff --stat ai-resources
+git -C "${WORKTREE_PATH}" diff --stat ai-resources
 ```
 
 If there are no changes, remove the worktree and branch, report that ai-resources is already up to date, and stop:
 
 ```bash
-git -C "$REPO_ROOT" worktree remove "$WORKTREE_PATH"
+git -C "${REPO_ROOT}" worktree remove "${WORKTREE_PATH}"
 git branch --delete chore/update-ai-resources
 ```
 
 5. Stage and commit the changes from within the worktree:
 
 ```bash
-git -C "$WORKTREE_PATH" add ai-resources
-git -C "$WORKTREE_PATH" commit -m "chore: update ai-resources snapshot"
+git -C "${WORKTREE_PATH}" add ai-resources
+git -C "${WORKTREE_PATH}" commit -m "chore: update ai-resources snapshot"
 ```
 
 6. Ask the user: "Would you like to link the skills so they are available as slash commands?"
@@ -66,18 +66,18 @@ git -C "$WORKTREE_PATH" commit -m "chore: update ai-resources snapshot"
    - If yes, push the branch and create a draft PR:
 
      ```bash
-     git -C "$WORKTREE_PATH" push --set-upstream origin chore/update-ai-resources
+     git -C "${WORKTREE_PATH}" push --set-upstream origin chore/update-ai-resources
      gh pr create --draft --title "chore: update ai-resources snapshot"
      ```
 
      Then remove the worktree:
 
      ```bash
-     git -C "$REPO_ROOT" worktree remove "$WORKTREE_PATH"
+     git -C "${REPO_ROOT}" worktree remove "${WORKTREE_PATH}"
      ```
 
    - If no, remind the user to raise a PR when ready, and remove the worktree:
 
      ```bash
-     git -C "$REPO_ROOT" worktree remove "$WORKTREE_PATH"
+     git -C "${REPO_ROOT}" worktree remove "${WORKTREE_PATH}"
      ```

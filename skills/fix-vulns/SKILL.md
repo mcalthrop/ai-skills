@@ -39,13 +39,13 @@ Check for dependency vulnerabilities and raise a PR that addresses all of them.
 
 ```bash
 REPO_ROOT="$(git rev-parse --show-toplevel)"
-REPO_NAME="$(basename "$REPO_ROOT")"
+REPO_NAME="$(basename "${REPO_ROOT}")"
 WORKTREE_PATH="${REPO_ROOT}/../${REPO_NAME}-fix-security-vulnerabilities"
 git fetch origin main
-git worktree add "$WORKTREE_PATH" --branch fix/security-vulnerabilities origin/main
+git worktree add "${WORKTREE_PATH}" --branch fix/security-vulnerabilities origin/main
 ```
 
-5. For each vulnerable package identified in the audit output, update it to the minimum safe version using the appropriate command. Run all subsequent commands from within `$WORKTREE_PATH`.
+5. For each vulnerable package identified in the audit output, update it to the minimum safe version using the appropriate command. Run all subsequent commands from within `${WORKTREE_PATH}`.
 
 | Package manager | Update command |
 | --------------- | -------------- |
@@ -102,10 +102,10 @@ git commit -m "fix(deps): resolve audit vulnerabilities"
 8. Push the branch from within the worktree, raise a draft PR, then remove the worktree:
 
 ```bash
-cd "$WORKTREE_PATH"
+cd "${WORKTREE_PATH}"
 git push --set-upstream origin fix/security-vulnerabilities
 gh pr create --draft --title "fix(deps): resolve audit vulnerabilities" --body "..."
-git -C "$REPO_ROOT" worktree remove "$WORKTREE_PATH"
+git -C "$REPO_ROOT" worktree remove "${WORKTREE_PATH}"
 ```
 
 The PR body must list every vulnerability that was fixed, including package name, severity, and the resolution applied.
