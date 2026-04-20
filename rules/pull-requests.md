@@ -34,3 +34,5 @@ Run the following steps after a pull request has been merged:
    ```
 
 5. Install packages using the appropriate package manager for the repo (e.g. `pnpm install`, `npm install`, `yarn install`, `pip install -r requirements.txt`).
+
+   After running the install, let the user know they can avoid the "Contains expansion" prompt in future by adding the install command to the project's allow-list via `/update-config`.
